@@ -3,7 +3,7 @@ import customtkinter as ctk
 # pip install customtkinter
 import utils as u
 from tkinter import filedialog
-from PIL import Image, ImageTk
+from PIL import Image
 
 global image
 
@@ -17,8 +17,8 @@ def load_image():
         photo = ctk.CTkImage(dark_image=image, size=(alpha*image.width, alpha*image.height))
         image_label.configure(image=photo)
         btnImage.configure(text = "Cambia immagine")
-        #if btnCom.cget("state")=="disabled":
-        #    btnCom.configure(state="normal")
+        control_calculate()
+        entF.focus_set()
 
 
 def clear_all():
@@ -28,10 +28,24 @@ def clear_all():
     entD.delete(0, "end")
     #btnCom.configure(state="disabled")
     
+def control_calculate(event=""):
+    lbR.configure(text = "")
+    if (btnCom.cget("state")=="disabled"):
+        if u.is_pos_int(entF.get()) and u.is_pos_int(entD.get()):
+            d = int(entD.get())
+            F = int(entF.get())
+            if (d >= 0) and (d < (2*F - 2)):                
+                if not (image_label.cget("image") is None):
+                    btnCom.configure(state="normal")    
+            else:
+                lbR.configure(text = "Il valore di d deve essere un intero compreso tra 0 e (2F - 2)", text_color = "red")
 
-def calculate():
+def calculate(event=""):
     val = entF.get()
     print(u.is_pos_int(val))
+
+def passToD(event):
+    entD.focus_set()
         
 
 ## Creating interface
@@ -51,36 +65,50 @@ root.resizable(False, False)
 frame = ctk.CTkFrame(master = root)
 frame.pack(pady = 20, padx = 60, fill = "both", expand = True)
 ### Project title
-title = ctk.CTkLabel(master=frame, text="Progetto di compressione delle immagini", font = ("Robot", 24))
+title = ctk.CTkLabel(master=frame, text="Progetto di compressione delle immagini", font = ("Roboto", 24))
 title.pack(padx = 10)
 ### button for importing image
 image_loaded = False
 btnImage = ctk.CTkButton(frame, text="Carica immagine", command=load_image)
 btnImage.pack(pady = 50)
-### image
-image_label = ctk.CTkLabel(frame, text="")
-image_label.pack(pady = 15)
+### images
+frameIm = ctk.CTkFrame(master = frame)
+frameIm.pack()
+image_label = ctk.CTkLabel(frameIm, text="")
+image_label.pack()
+image2_label = ctk.CTkLabel(frameIm, text="")
+image2_label.pack()
 ### F parameter
 lbF = ctk.CTkLabel(master=frame, text="Parametro F")
 lbF.pack(padx = 10)
 ### Entry
 entF = ctk.CTkEntry(frame, placeholder_text="Parametro F")
 entF.pack(padx = 10, pady = 3)
+
 ### d parameter
 lbD = ctk.CTkLabel(master=frame, text="Parametro d")
-lbD.pack(padx = 10,)
+lbD.pack(padx = 10)
 ### Entry
 entD = ctk.CTkEntry(frame, placeholder_text="Parametro d")
 entD.pack(padx = 10, pady = 3)
 
-### Calculate button
-
-btnCom = ctk.CTkButton(frame, text="Calcola", command=calculate)
-btnCom.pack(pady = 20)
-
-
 ### Reset button
 btnCl = ctk.CTkButton(frame, text="Ripristina tutto", command=clear_all, fg_color="#df2c14", hover_color = "#c61a09")
 btnCl.pack(pady = 20)
+
+### Calculate button
+btnCom = ctk.CTkButton(frame, text="Calcola", command=calculate, state="disabled")
+btnCom.pack(pady = 20)
+
+### Result paragraph
+lbR = ctk.CTkLabel(master=frame, text="")
+lbR.pack(padx = 10)
+
+## Events handling
+entF.bind("<Return>", passToD)
+entF.bind("<Tab>", passToD)
+entF.bind("<Key>", control_calculate)
+entD.bind("<Key>", control_calculate)
+entD.bind("<Return>", calculate)
 
 root.mainloop()
