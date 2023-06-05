@@ -8,6 +8,9 @@ def find_alpha(window:tuple,image:tuple):
 def is_pos_int(str:str):
     str = str.strip()
 
+    if str == "":
+        return False
+
     # Gestione del segno positivo
     if str[0] == '+':
         str = str[1:]
