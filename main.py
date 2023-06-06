@@ -12,6 +12,8 @@ global image
 def load_image():
     file_path = filedialog.askopenfilename(filetypes=[("Bitmap Image", "*.bmp")])
     if file_path:
+        image2_label.configure(image=None)
+        image2_label.pack(padx = 0)
         image = Image.open(file_path)
         alpha = u.find_alpha((wi,he),(image.width,image.height))
         photo = ctk.CTkImage(dark_image=image, size=(alpha*image.width, alpha*image.height))
@@ -23,10 +25,13 @@ def load_image():
 
 def clear_all():
     btnImage.configure(text = "Carica immagine")
-    image_label.configure(image=None)
+    image_label.destroy()
+    image2_label.destroy()
+    image_zone()
     entF.delete(0, "end")
     entD.delete(0, "end")
-    #btnCom.configure(state="disabled")
+    btnCom.configure(state="disabled")
+    frame.focus_set()
     
 def control_calculate(event=""):
     lbR.configure(text = "")
@@ -41,12 +46,18 @@ def control_calculate(event=""):
                 lbR.configure(text = "Il valore di d deve essere un intero compreso tra 0 e (2F - 2)", text_color = "red")
 
 def calculate(event=""):
-    val = entF.get()
-    print(u.is_pos_int(val))
+    image2_label.configure(image = image_label.cget("image"))
+    image2_label.pack(side="left", pady=15, padx=15)
 
 def passToD(event):
     entD.focus_set()
-        
+
+def image_zone():
+    global image_label, image2_label
+    image_label = ctk.CTkLabel(frameIm, text="")
+    image_label.pack(side="left", pady=15, padx=15)
+    image2_label = ctk.CTkLabel(frameIm, text="")
+    image2_label.pack(side="left", pady=15, padx=15)
 
 ## Creating interface
 
@@ -61,23 +72,25 @@ wi = 1000
 he = 1000
 root.title("Progetto di compressione delle immagini")
 root.resizable(False, False)
+
 ### frame of the interface
 frame = ctk.CTkFrame(master = root)
 frame.pack(pady = 20, padx = 60, fill = "both", expand = True)
+
 ### Project title
 title = ctk.CTkLabel(master=frame, text="Progetto di compressione delle immagini", font = ("Roboto", 24))
 title.pack(padx = 10)
+
 ### button for importing image
 image_loaded = False
 btnImage = ctk.CTkButton(frame, text="Carica immagine", command=load_image)
 btnImage.pack(pady = 50)
+
 ### images
 frameIm = ctk.CTkFrame(master = frame)
-frameIm.pack()
-image_label = ctk.CTkLabel(frameIm, text="")
-image_label.pack()
-image2_label = ctk.CTkLabel(frameIm, text="")
-image2_label.pack()
+frameIm.pack(pady=30, padx=15)
+image_zone()
+
 ### F parameter
 lbF = ctk.CTkLabel(master=frame, text="Parametro F")
 lbF.pack(padx = 10)
