@@ -1,9 +1,7 @@
-import tkinter as tk
 import customtkinter as ctk
-# pip install customtkinter
-import utils as u
 from tkinter import filedialog
 from PIL import Image
+import utils as u
 
 global image
 
@@ -15,7 +13,7 @@ def load_image():
         image2_label.configure(image=None)
         image2_label.pack(padx = 0)
         image = Image.open(file_path)
-        alpha = u.find_alpha((wi,he),(image.width,image.height))
+        alpha = u.find_alpha((root.winfo_width(),root.winfo_height()),(image.width,image.height))
         photo = ctk.CTkImage(dark_image=image, size=(alpha*image.width, alpha*image.height))
         image_label.configure(image=photo)
         btnImage.configure(text = "Cambia immagine")
@@ -68,15 +66,12 @@ ctk.set_default_color_theme("green")
 ### main window
 root = ctk.CTk()
 root.geometry("1000x1000")
-wi = 1000
-he = 1000
+root.minsize(400, 400)
 root.title("Progetto di compressione delle immagini")
-root.resizable(False, False)
 
 ### frame of the interface
 frame = ctk.CTkFrame(master = root)
 frame.pack(pady = 20, padx = 60, fill = "both", expand = True)
-
 ### Project title
 title = ctk.CTkLabel(master=frame, text="Progetto di compressione delle immagini", font = ("Roboto", 24))
 title.pack(padx = 10)
