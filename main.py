@@ -12,10 +12,12 @@ def load_image():
     if file_path:
         image2_label.configure(image=None)
         image2_label.pack(padx = 0)
+        sv_img.pack_forget()
         image = Image.open(file_path)
         alpha = u.find_alpha((root.winfo_width(),root.winfo_height()),(image.width,image.height))
         photo = ctk.CTkImage(dark_image=image, size=(alpha*image.width, alpha*image.height))
         image_label.configure(image=photo)
+        image_label.pack(side="left", pady=15, padx=15)
         btnImage.configure(text = "Cambia immagine")
         control_calculate()
         entF.focus_set()
@@ -25,6 +27,7 @@ def clear_all():
     btnImage.configure(text = "Carica immagine")
     image_label.destroy()
     image2_label.destroy()
+    sv_img.destroy()
     image_zone()
     entF.delete(0, "end")
     entD.delete(0, "end")
@@ -44,18 +47,29 @@ def control_calculate(event=""):
                 lbR.configure(text = "Il valore di d deve essere un intero compreso tra 0 e (2F - 2)", text_color = "red")
 
 def calculate(event=""):
+    image_label.pack(anchor="nw", pady=15, padx=15)
     image2_label.configure(image = image_label.cget("image"))
-    image2_label.pack(side="left", pady=15, padx=15)
+    image2_label.pack(pady=15, padx=15)
+    sv_img.pack(pady=15)
 
 def passToD(event):
     entD.focus_set()
 
+def save_image():
+    file_path = filedialog.asksaveasfilename(defaultextension=".jpeg", filetypes=[("JPEG Files", "*.jpeg")])
+    if file_path:
+        
+        #Image(image2_label.cget("image")).save(file_path)
+        print("Immagine salvata con successo!")
+
 def image_zone():
-    global image_label, image2_label
+    global image_label, image2_label, sv_img
+    
     image_label = ctk.CTkLabel(frameIm, text="")
     image_label.pack(side="left", pady=15, padx=15)
     image2_label = ctk.CTkLabel(frameIm, text="")
-    image2_label.pack(side="left", pady=15, padx=15)
+    image2_label.pack(pady=15, padx=15)
+    sv_img = ctk.CTkButton(frameIm, text="Salva immagine", command=save_image)
 
 ## Creating interface
 
@@ -74,16 +88,16 @@ frame = ctk.CTkFrame(master = root)
 frame.pack(pady = 20, padx = 60, fill = "both", expand = True)
 ### Project title
 title = ctk.CTkLabel(master=frame, text="Progetto di compressione delle immagini", font = ("Roboto", 24))
-title.pack(padx = 10)
+title.pack(pady = 5, padx = 10)
 
 ### button for importing image
 image_loaded = False
 btnImage = ctk.CTkButton(frame, text="Carica immagine", command=load_image)
-btnImage.pack(pady = 50)
+btnImage.pack(pady = 20)
 
 ### images
 frameIm = ctk.CTkFrame(master = frame)
-frameIm.pack(pady=30, padx=15)
+frameIm.pack(pady=10, padx=15)
 image_zone()
 
 ### F parameter
