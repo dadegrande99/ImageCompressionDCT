@@ -62,3 +62,22 @@ def printTime(time):
     # print(str(tmp[3]) + " : " + str(tmp[2]) + " : " + str(tmp[1]) + " : " + str(tmp[0]))
     # print(res)
     return (res)
+
+
+def reFormat(x: np.array, sig: int):
+    for i in range(len(x)):
+        if type(x[i]) is np.array:
+            x[i] = reFormat(x[i], sig)
+        elif not (np.isnan(x[i])):
+            x[i] = reFormatNumber(x[i], sig)
+    return x
+
+
+def reFormatNumber(x: np.generic, sig: int):
+    string = str(x)
+    fon = sig  # quantità di numeri significativi che voglio tenere
+    if '-' in string[:fon]:
+        fon += 1
+    if '.' in string[:fon]:
+        fon += 1
+    return float(string[:fon])

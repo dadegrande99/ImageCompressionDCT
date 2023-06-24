@@ -31,9 +31,9 @@ verMtx2 = np.array([
         2.15e+01, 8.13e+01, 6.37e+01, 5.90e+00]
 ])
 
-verArr1 = np.array([231, 32, 233, 161, 24, 71, 140, 245])
+verArr1 = np.array([231, 32, 233, 161, 24, 71, 140, 245], dtype=np.float32)
 verArr2 = np.array([4.01e+02, 6.60e+00, 1.09e+02, -1.12e+02,
-                    6.54e+01, 1.21e+02, 1.16e+02, 2.88e+01])
+                   6.54e+01, 1.21e+02, 1.16e+02, 2.88e+01])
 
 '''
 testMtx = dct(verMtx1)
@@ -49,3 +49,26 @@ else:
     print("La verifica sulla DCT per Arr non è andata a buon fine")
 
 '''
+
+
+def dct(x):
+    N = len(x)
+    X = np.zeros(N)
+
+    for k in range(N):
+        X[k] = np.sqrt(2/N) * np.sum(x * np.cos((np.pi/N)
+                                                * k * (np.arange(N) + 0.5)))
+
+        if k == 0:
+            X[k] *= 1/np.sqrt(2)
+
+    return X
+
+
+testArr = u.reFormat(dct(verArr1), 3)
+print(verArr2)
+print(testArr)
+if u.MtxArrCompare(testArr, verArr2):
+    print("La verifica sulla DCT per Arr è andata a buon fine")
+else:
+    print("La verifica sulla DCT per Arr non è andata a buon fine")
