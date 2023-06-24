@@ -1,6 +1,6 @@
 import numpy as np
 import utils as u
-
+from DCT import custom_dct, custom_dct2
 
 verMtx1 = np.array([
     [231, 32, 233, 161, 24, 71, 140, 245],
@@ -50,25 +50,16 @@ else:
 
 '''
 
-
-def dct(x):
-    N = len(x)
-    X = np.zeros(N)
-
-    for k in range(N):
-        X[k] = np.sqrt(2/N) * np.sum(x * np.cos((np.pi/N)
-                                                * k * (np.arange(N) + 0.5)))
-
-        if k == 0:
-            X[k] *= 1/np.sqrt(2)
-
-    return X
-
-
-testArr = u.reFormat(dct(verArr1), 3)
-print(verArr2)
-print(testArr)
+testArr = u.reFormat(custom_dct(verArr1), 3)
 if u.MtxArrCompare(testArr, verArr2):
     print("La verifica sulla DCT per Arr è andata a buon fine")
 else:
     print("La verifica sulla DCT per Arr non è andata a buon fine")
+
+testMtx = u.reFormat(custom_dct2(verMtx1), 3)
+print(testMtx)
+print(verMtx2)
+if u.MtxArrCompare(testMtx, verMtx2):
+    print("La verifica sulla DCT per Mtx è andata a buon fine")
+else:
+    print("La verifica sulla DCT per Mtx non è andata a buon fine")

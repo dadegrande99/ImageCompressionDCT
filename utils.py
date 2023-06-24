@@ -66,7 +66,7 @@ def printTime(time):
 
 def reFormat(x: np.array, sig: int):
     for i in range(len(x)):
-        if type(x[i]) is np.array:
+        if type(x[i]) is np.ndarray:
             x[i] = reFormat(x[i], sig)
         elif not (np.isnan(x[i])):
             x[i] = reFormatNumber(x[i], sig)
