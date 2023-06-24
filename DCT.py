@@ -1,82 +1,54 @@
 import math
 import numpy as np
 
-#sarà da inizializzare a random sulla base delle "dimensioni" fornite dall'Array N che dovrà avere ampi valori
-matrix = [[255, 255, 255, 255, 255, 255, 255, 255],
-          [255, 255, 255, 255, 255, 255, 255, 255],
-          [255, 255, 255, 255, 255, 255, 255, 255],
-          [255, 255, 255, 255, 255, 255, 255, 255],
-          [255, 255, 255, 255, 255, 255, 255, 255],
-          [255, 255, 255, 255, 255, 255, 255, 255],
-          [255, 255, 255, 255, 255, 255, 255, 255],
-          [255, 255, 255, 255, 255, 255, 255, 255]]
-
 pi = math.pi
 block_dimension = 8 #dovrà essere uguale a quello passato credo
 
-#bisognerà passare un'immagine e prenderne le sue dimensioni
-def dct():
-    image = np.random.randint(0, 256, size=((80, 80)))
-    image_height, image_width = image.shape
-    dct_matrix = np.zeros((image_height, image_width))
-    for y in range(0,  image_height, block_dimension):
-        for x in range(0, image_width, block_dimension):
-            block = image[y:y+block_dimension, x:x+block_dimension]
-            dct_block = calculate_dct(block)
-            dct_matrix[y:y+block_dimension, x:x+block_dimension] = dct_block
-    
-    return dct_matrix
+def dct(image):
+    dim = len(image)
+    dct_image = np.zeros(dim)
 
-def calculate_dct(block):
-    for i in range(block_dimension):
-        for j in range(block_dimension):
-            sum = 0
-            for u in range(block_dimension):
-                for v in range(block_dimension):
-                    pixel_value = block[i, j]
-                    cosine_u = cosine(u, i, block_dimension)
-                    cosine_v = cosine(v, j, block_dimension)
-                    sum += pixel_value * cosine_u * cosine_v
-            dct_coeff = sum * coefficient_normalization(u, block_dimension) * coefficient_normalization(v, block_dimension)
-            block[u, v] = dct_coeff
-    return block
+    for k in range(dim):
+        dct_image[k] = np.sqrt(2/dim) * np.sum(image * np.cos((np.pi/dim) * k * (np.arange(dim) + 0.5)))
 
-def cosine(k, n, block_dim):
-    return math.cos((k * (pi/block_dim)) * n)
+        if k == 0:
+            dct_image[k] *= 1/np.sqrt(2)
+    return dct_image
 
-def coefficient_normalization(coeff, block_dim, dct2 = False):
-    if(dct2 == False):
-        if (coeff == 0):
-            return math.sqrt(1/block_dim)
-        else:
-            return math.sqrt(2/block_dim)
-    else:
-        if (coeff == 0):
-            return math.sqrt(1/2)
-        else:
-            return math.sqrt(2)
-
-#mtx = dct()
-#for i, row in enumerate(mtx):
-#   print(row)
+mtx = dct(np.array([231, 32, 233, 161, 24, 71, 140, 245], dtype=float))
+print("--------DCT--------")
+for i, row in enumerate(mtx):
+   print(row)
 
 def dct2(matrix):
+    #avremo in input un'immagine che dovremo convertire in un numpy array
     rows, cols = matrix.shape
-    dct_matrix = np.zeros((rows, cols))
+    dct_matrix = np.zeros_like(matrix, dtype=float)
 
     for i in range(rows):
         for j in range(cols):
-            sum = 0
+            sum = 0.0
+            coeff_u = 1 if i == 0 else np.sqrt(2)
+            coeff_v = 1 if j == 0 else np.sqrt(2)
             for u in range(rows):
                 for v in range(cols):
-                    pixel_value = matrix[i, j]
-                    cosine_u = cosine(u, i, block_dimension)
-                    cosine_v = cosine(v, j, block_dimension)
+                    pixel_value = matrix[u, v]
+                    cosine_u = np.cos((2 * u + 1) * i * pi / (2*rows))
+                    cosine_v = np.cos((2 * v + 1) * j * pi / (2*cols))
                     sum += pixel_value * cosine_u * cosine_v
-            dct_coeff = sum * coefficient_normalization(u, block_dimension, True) * coefficient_normalization(v, block_dimension, True)
-            dct_matrix[u, v] = dct_coeff
+            dct_matrix[i, j] = sum * coeff_u * coeff_v / np.sqrt(rows*cols)
     return dct_matrix
 
-mtx = dct2(np.random.randint(0, 256, size=((80, 80))))
-for i, row in enumerate(mtx):
+mtx = dct2( np.array([
+    [231, 32, 233, 161, 24, 71, 140, 245],
+    [247, 40, 248, 245, 124, 204, 36, 107],
+    [234, 202, 245, 167, 9, 217, 239, 173],
+    [193, 190, 100, 167, 43, 180, 8, 70],
+    [11, 24, 210, 177, 81, 243, 8, 112],
+    [97, 195, 203, 47, 125, 114, 165, 181],
+    [193, 70, 174, 167, 41, 30, 127, 245],
+    [87, 149, 57, 192, 65, 129, 178, 228]
+], dtype=np.float32))
+print("--------DCT2--------")
+for row in mtx:
     print(row)
