@@ -10,7 +10,8 @@ plt.rcParams['figure.figsize'] = [9, 6]
 plt.rcParams['figure.dpi'] = 100
 
 
-dimensions = [200, 500, 1000, 2000]
+# dimensions = [200, 500, 1000, 2000]
+dimensions = [20, 50, 100, 200]
 
 timing = {
     "HomeMade": [],  # timing with our method
@@ -27,13 +28,13 @@ for n in dimensions:
     results["FFT"].append(dct(matrix))
     t2 = datetime.now()
     # results["HomeMade"].append(dct(matrix))
-    # timing["HomeMade"].append(datetime.now() - t2)
+    t3 = datetime.now()
+    # timing["HomeMade"].append(t3 - t2)
     timing["FFT"].append(t2 - t1)
 
 for i in range(len(dimensions)):
     # timing["HomeMade"][i] = int(timing["HomeMade"][i].total_seconds() * 1e6)
     timing["FFT"][i] = int(timing["FFT"][i].total_seconds() * 1e6)
-
 
 type = "FFT"
 # for type in timing:
@@ -43,9 +44,41 @@ elif type == "HomeMade":
     col = "blue"
 plt.plot(dimensions, timing[type], color=col, label=type)
 for i in range(len(dimensions)):
-    plt.plot(dimensions[i], timing[type][i], color='red', marker='o')
+    plt.plot(dimensions[i], (timing[type][i]), color='red', marker='o')
     plt.text(dimensions[i], timing[type][i], u.printTime(
         timing[type][i]), color='black', ha='left', va="bottom", rotation=45)
+
+plt.xlabel('Dimensions')
+plt.ylabel('Times')
+plt.title('Comparing different DCT')
+plt.legend()
+plt.show()
+
+type = "FFT"
+# for type in timing:
+if type == "FFT":
+    col = "green"
+elif type == "HomeMade":
+    col = "blue"
+plt.plot(dimensions, timing[type], color=col, label=type)
+for i in range(len(dimensions)):
+    plt.plot(dimensions[i], (timing[type][i]), color='red', marker='o')
+    plt.text(dimensions[i], timing[type][i], u.printTime(
+        timing[type][i]), color='black', ha='left', va="bottom", rotation=45)
+
+plt.xlabel('Dimensions')
+plt.ylabel('Times')
+plt.title('Comparing different DCT')
+plt.legend()
+plt.show()
+
+type = "FFT"
+# for type in timing:
+if type == "FFT":
+    col = "green"
+elif type == "HomeMade":
+    col = "blue"
+plt.semilogx(dimensions, timing[type], color=col, label=type)
 
 plt.xlabel('Dimensions')
 plt.ylabel('Times')

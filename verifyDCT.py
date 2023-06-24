@@ -34,3 +34,18 @@ verMtx2 = np.array([
 verArr1 = np.array([231, 32, 233, 161, 24, 71, 140, 245])
 verArr2 = np.array([4.01e+02, 6.60e+00, 1.09e+02, -1.12e+02,
                     6.54e+01, 1.21e+02, 1.16e+02, 2.88e+01])
+
+'''
+testMtx = dct(verMtx1)
+if u.MtxArrCompare(testMtx, verMtx2):
+    print("La verifica sulla DCT per Mtx è andata a buon fine")
+else:
+    print("La verifica sulla DCT per Mtx non è andata a buon fine")
+
+testArr = dct(verArr1)
+if u.MtxArrCompare(testArr, verArr2):
+    print("La verifica sulla DCT per Arr è andata a buon fine")
+else:
+    print("La verifica sulla DCT per Arr non è andata a buon fine")
+
+'''
