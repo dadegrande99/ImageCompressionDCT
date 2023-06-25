@@ -6,16 +6,16 @@ from image_processing import process_image
 
 
 # Function for the interface
-
-
 def load_image():
-    global file_path
+    # Caricamento di un'immagine
+    global file_path, alpha, image
     file_path = filedialog.askopenfilename(
         filetypes=[("Bitmap Image", "*.bmp")])
     if file_path:
-        image2_label.configure(image=None)
-        image2_label.pack(padx=0)
-        sv_img.pack_forget()
+        image_label.destroy()
+        image2_label.destroy()
+        sv_img.destroy()
+        image_zone()
         image = Image.open(file_path)
         alpha = u.find_alpha(
             (root.winfo_width(), root.winfo_height()), (image.width, image.height))
@@ -29,6 +29,7 @@ def load_image():
 
 
 def clear_all():
+    # reset all interface
     btnImage.configure(text="Carica immagine")
     image_label.destroy()
     image2_label.destroy()
@@ -41,10 +42,12 @@ def clear_all():
 
 
 def control_calculate(event=""):
+    # Controll if i can compress the image
     lbR.configure(text="")
     if (btnCom.cget("state") == "disabled"):
         if u.is_pos_int(entF.get()) and u.is_pos_int(entD.get()):
             d = int(entD.get())
+            print("a")
             F = int(entF.get())
             if (d >= 0) and (d < (2*F - 2)):
                 if not (image_label.cget("image") is None):
@@ -55,12 +58,11 @@ def control_calculate(event=""):
 
 
 def calculate(event=""):
+    # Compress the image
     global img2
     img2 = Image.fromarray(process_image(
         file_path, int(entF.get()), int(entD.get())))
     image_label.pack(anchor="nw", pady=15, padx=15)
-    alpha = u.find_alpha(
-            (root.winfo_width(), root.winfo_height()), (img2.width, img2.height))
     photo2 = ctk.CTkImage(dark_image=img2, size=(
         alpha*img2.width, alpha*img2.height))
     image2_label.configure(image=photo2)
@@ -68,20 +70,17 @@ def calculate(event=""):
     sv_img.pack(pady=15)
 
 
-def passToD(event):
-    entD.focus_set()
-
-
 def save_image():
+    # Save the compressed image
     fp = filedialog.asksaveasfilename(
         defaultextension=".jpeg", filetypes=[("JPEG Files", "*.jpeg")])
     if file_path:
         img2.save(fp)
-        # Image(image2_label.cget("image")).save(file_path)
         print("Immagine salvata con successo!")
 
 
 def image_zone():
+    # Creating image zone
     global image_label, image2_label, sv_img
 
     image_label = ctk.CTkLabel(frameIm, text="")
@@ -90,8 +89,16 @@ def image_zone():
     image2_label.pack(pady=15, padx=15)
     sv_img = ctk.CTkButton(frameIm, text="Salva immagine", command=save_image)
 
-# Creating interface
 
+def passToD(event):
+    entD.focus_set()
+
+
+def passToF(event):
+    entF.focus_set()
+
+
+# Creating interface
 
 # interface style
 ctk.set_appearance_mode("dark")
@@ -101,6 +108,7 @@ ctk.set_default_color_theme("green")
 root = ctk.CTk()
 root.geometry("1000x1000")
 root.minsize(400, 400)
+
 root.title("Progetto di compressione delle immagini")
 
 # frame of the interface
@@ -153,6 +161,7 @@ lbR.pack(padx=10)
 entF.bind("<Return>", passToD)
 entF.bind("<Tab>", passToD)
 entF.bind("<Key>", control_calculate)
+entD.bind("<Tab>", passToF)
 entD.bind("<Key>", control_calculate)
 entD.bind("<Return>", calculate)
 
