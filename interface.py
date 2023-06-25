@@ -107,7 +107,8 @@ ctk.set_default_color_theme("green")
 # main window
 root = ctk.CTk()
 root.geometry("1000x1000")
-root.minsize(400, 400)
+root.minsize(1000, 1000)
+root.maxsize(1000, 1000)
 
 root.title("Progetto di compressione delle immagini")
 
