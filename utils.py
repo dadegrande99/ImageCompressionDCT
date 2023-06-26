@@ -6,7 +6,7 @@ def find_alpha(window: tuple, image: tuple):
     if image[0] >= image[1]:  # Resize by width
         return (window[0]/3)/image[0]
     else:  # Resize by height
-        return (window[1]/5)/image[1]
+        return (window[1]/4)/image[1]
 
 
 def is_pos_int(str: str):
