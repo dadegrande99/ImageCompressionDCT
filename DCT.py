@@ -36,7 +36,7 @@ def custom_idct2(dct_image):
    # Ottieni le dimensioni del blocco
     M, N = dct_image.shape
 
-    # Inizializza l'array per il blocco di output
+    # Inizializza l'array per il blocco di output (matrice con i valori originali ricostruiti)
     f = np.zeros((M, N), dtype=np.float64)
 
     # Calcola la DCT2 inversa per ogni punto del blocco
@@ -49,7 +49,7 @@ def custom_idct2(dct_image):
                     # Calcola il coefficiente di coseno
                     coef = np.cos((np.pi / M) * (i + 0.5) * x) * np.cos((np.pi / N) * (j + 0.5) * y)
 
-                    # Aggiungi il termine alla somma
+                    # Aggiungi il termine alla somma delle componenti del segnale originale 
                     value += coef * dct_image[x, y]
 
             # Moltiplica il valore per il fattore di normalizzazione
