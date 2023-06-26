@@ -162,19 +162,23 @@ frameIm = ctk.CTkFrame(master=frame)
 frameIm.pack(pady=10, padx=15)
 image_zone()
 
-# F parameter
-lbF = ctk.CTkLabel(master=frame, text="Parametro F")
-lbF.pack(padx=10)
-# Entry
-entF = ctk.CTkEntry(frame, placeholder_text="Parametro F")
-entF.pack(padx=10, pady=3)
+# Parameters frame
+framePar = ctk.CTkFrame(master=frame)
+framePar.pack(pady=10, padx=15)
 
-# d parameter
-lbD = ctk.CTkLabel(master=frame, text="Parametro d")
-lbD.pack(padx=10)
-# Entry
-entD = ctk.CTkEntry(frame, placeholder_text="Parametro d")
-entD.pack(padx=10, pady=3)
+# F parameter ~ Label
+lbF = ctk.CTkLabel(master=framePar, text="Parametro F")
+lbF.pack(side="left", padx=10)
+# F parameter ~ Entry
+entF = ctk.CTkEntry(framePar, placeholder_text="Parametro F")
+entF.pack(side="left", padx=10, pady=3)
+
+# d parameter ~ Label
+lbD = ctk.CTkLabel(master=framePar, text="Parametro d")
+lbD.pack(side="left", padx=10)
+# d parameter ~ Entry
+entD = ctk.CTkEntry(framePar, placeholder_text="Parametro d")
+entD.pack(side="left", padx=10, pady=3)
 
 # Reset button
 btnCl = ctk.CTkButton(frame, text="Ripristina tutto",
