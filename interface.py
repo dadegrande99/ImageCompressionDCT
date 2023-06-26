@@ -24,7 +24,7 @@ def load_image():
         image_label.configure(image=photo)
         image_label.pack(side="left", pady=15, padx=15)
         btnImage.configure(text="Cambia immagine")
-        control_calculate()
+        # control_calculate()
         entF.focus_set()
 
 
@@ -37,29 +37,61 @@ def clear_all():
     image_zone()
     entF.delete(0, "end")
     entD.delete(0, "end")
-    btnCom.configure(state="disabled")
+    lbR.configure(text="")
     frame.focus_set()
 
 
 def control_calculate(event=""):
     # Controll if i can compress the image
-    lbR.configure(text="")
-    if (btnCom.cget("state") == "disabled"):
-        if u.is_pos_int(entF.get()) and u.is_pos_int(entD.get()):
-            d = int(entD.get())
-            print("a")
-            F = int(entF.get())
-            if (d >= 0) and (d < (2*F - 2)):
-                if not (image_label.cget("image") is None):
-                    btnCom.configure(state="normal")
-            else:
-                lbR.configure(
-                    text="Il valore di d deve essere un intero compreso tra 0 e (2F - 2)", text_color="red")
+    results = ""
+    errors = 0
+
+    # Controllo se è presente l'immagine
+    if image_label.cget("image") is None:
+        if errors > 0:
+            results += "\n"
+        errors += 1
+        results += "Immagine assente"
+
+    if not (u.is_pos_int(entF.get()) and u.is_pos_int(entD.get())):
+        if not (u.is_pos_int(entF.get())):
+            if errors > 0:
+                results += "\n"
+            errors += 1
+            results += "Valore di F non valido o assente"
+        if not (u.is_pos_int(entD.get())):
+            if errors > 0:
+                results += "\n"
+            errors += 1
+            results += "Valore di d non valido o assente"
+    else:
+        d = int(entD.get())
+        F = int(entF.get())
+        if F > 0 and F <= min(image.width, image.height):
+            if d < 0 or d >= (2*F - 2):
+                if errors > 0:
+                    results += "\n"
+                errors += 1
+                results += "Il valore di d deve essere un intero compreso tra 0 e (2F - 2)"
+        else:
+            if errors > 0:
+                results += "\n"
+            errors += 1
+            results += "Valore di F non valido"
+
+    lbR.configure(text=results, text_color="red")
+    return (errors == 0)
 
 
 def calculate(event=""):
     # Compress the image
     global img2
+
+    if control_calculate():
+        lbR.configure(text="")
+    else:
+        return
+
     img2 = Image.fromarray(process_image(
         file_path, int(entF.get()), int(entD.get())))
     image_label.pack(anchor="nw", pady=15, padx=15)
@@ -150,8 +182,7 @@ btnCl = ctk.CTkButton(frame, text="Ripristina tutto",
 btnCl.pack(pady=20)
 
 # Calculate button
-btnCom = ctk.CTkButton(frame, text="Calcola",
-                       command=calculate, state="disabled")
+btnCom = ctk.CTkButton(frame, text="Calcola", command=calculate)
 btnCom.pack(pady=20)
 
 # Result paragraph
@@ -161,9 +192,9 @@ lbR.pack(padx=10)
 # Events handling
 entF.bind("<Return>", passToD)
 entF.bind("<Tab>", passToD)
-entF.bind("<Key>", control_calculate)
+# entF.bind("<Key>", control_calculate)
 entD.bind("<Tab>", passToF)
-entD.bind("<Key>", control_calculate)
+# entD.bind("<Key>", control_calculate)
 entD.bind("<Return>", calculate)
 
 root.mainloop()
