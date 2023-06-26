@@ -3,20 +3,17 @@ import numpy as np
 
 def find_alpha(window: tuple, image: tuple):
     # Calculation of the alpha coefficient for resizing the window in which the image is displayed
-    if image[0] >= image[1]:
-        i = 0
-    else:
-        i = 1
-    return (window[i]*0.3)/image[i]
+    if image[0] >= image[1]:  # Resize by height
+        return (window[0]/4)/image[0]
+    else:  # Resize by width
+        return (window[1]/3)/image[1]
 
 
 def is_pos_int(str: str):
     # Return true if the string contains a positive integer
     str = str.strip()
-
     if str == "":
         return False
-
     # Gestione del segno positivo
     if str[0] == '+':
         str = str[1:]
@@ -26,7 +23,6 @@ def is_pos_int(str: str):
     elif str.count('.') == 1:
         strs = str.split('.')
         return strs[0].isdigit() and (strs[1].count('0') == len(strs[1]))
-
     return False
 
 
@@ -59,8 +55,6 @@ def printTime(time):
     else:
         res = str(tmp[0]) + "\u03BCs"
 
-    # print(str(tmp[3]) + " : " + str(tmp[2]) + " : " + str(tmp[1]) + " : " + str(tmp[0]))
-    # print(res)
     return (res)
 
 
@@ -76,8 +70,11 @@ def reFormat(x: np.array, sig: int):
 def reFormatNumber(x: np.generic, sig: int):
     string = str(x)
     fon = sig  # quantità di numeri significativi che voglio tenere
+    ex = 1
     if '-' in string[:fon]:
         fon += 1
     if '.' in string[:fon]:
         fon += 1
-    return float(string[:fon])
+    elif '.' in string[fon:]:
+        ex = 10 ** (len(string.split('.')[0])-fon)
+    return float(string[:fon])*ex
