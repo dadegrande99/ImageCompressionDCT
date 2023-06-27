@@ -76,7 +76,7 @@ else:
 print("\n\n\n")
 
 # DCT2
-print("------------ Correttezza DCT ------------")
+print("------------ Correttezza DCT2 ------------")
 print("\n Matrice input")
 print(verMtx1)
 print("\n Matrice attesa")
