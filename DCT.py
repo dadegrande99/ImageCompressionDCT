@@ -52,14 +52,14 @@ def custom_idct(vector):
 def custom_idct2(matrix):
     # Calcola l'IDCT-II per una matrice bidimensionale
 
-    # Applica l'IDCT-II alle colonne
-    idct_cols = np.zeros_like(matrix, dtype=float)
-    for i in range(matrix.shape[1]):
-        idct_cols[:, i] = custom_idct(matrix[:, i])
-
-    # Applica l'IDCT-II alle righe
-    idct_full = np.zeros_like(matrix, dtype=float)
+    # Applica l'IDCT alle righe
+    idct_rows = np.zeros_like(matrix, dtype=float)
     for i in range(matrix.shape[0]):
-        idct_full[i, :] = custom_idct(idct_cols[i, :])
+        idct_rows[i, :] = custom_idct(matrix[i, :])
+
+    # Applica l'IDCT alle colonne così da ottenere il risultato completo
+    idct_full = np.zeros_like(matrix, dtype=float)
+    for i in range(matrix.shape[1]):
+        idct_full[:, i] = custom_idct(idct_rows[:, i])
 
     return idct_full
