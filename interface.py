@@ -4,8 +4,9 @@ from PIL import Image
 import utils as u
 from image_processing import process_image
 
-
 # Function for the interface
+
+
 def load_image():
     # Caricamento di un'immagine
     global file_path, alpha, image
@@ -39,6 +40,16 @@ def clear_all():
     entD.delete(0, "end")
     lbR.configure(text="")
     frame.focus_set()
+
+
+def change_version():
+    global fast
+    fast = not (fast)
+    print(fast)
+    if fast:
+        lbF.configure(text="Versione Fast")
+    else:
+        lbF.configure(text="Versione Custom")
 
 
 def control_calculate(event=""):
@@ -93,7 +104,7 @@ def calculate(event=""):
         return
 
     img2 = Image.fromarray(process_image(
-        file_path, int(entF.get()), int(entD.get())))
+        file_path, int(entF.get()), int(entD.get()), fast))
     image_label.pack(anchor="nw", pady=15, padx=15)
     photo2 = ctk.CTkImage(dark_image=img2, size=(
         alpha*img2.width, alpha*img2.height))
@@ -164,7 +175,7 @@ image_zone()
 
 # Parameters frame
 framePar = ctk.CTkFrame(master=frame)
-framePar.pack(pady=10, padx=15)
+framePar.pack(pady=20, padx=15)
 
 # F parameter ~ Label
 lbF = ctk.CTkLabel(master=framePar, text="Parametro F")
@@ -180,14 +191,25 @@ lbD.pack(side="left", padx=10)
 entD = ctk.CTkEntry(framePar, placeholder_text="Parametro d")
 entD.pack(side="left", padx=10, pady=3)
 
-# Reset button
-btnCl = ctk.CTkButton(frame, text="Ripristina tutto",
-                      command=clear_all, fg_color="#df2c14", hover_color="#c61a09")
-btnCl.pack(pady=20)
-
 # Calculate button
 btnCom = ctk.CTkButton(frame, text="Calcola", command=calculate)
-btnCom.pack(pady=20)
+btnCom.pack(pady=2)
+# DCT version
+fast = True
+lbF = ctk.CTkLabel(master=frame, text="Versione Fast")
+lbF.pack(padx=10)
+
+# Button Frame
+frameBut = ctk.CTkFrame(master=frame)
+frameBut.pack(pady=20, padx=15)
+# Reset button
+btnCl = ctk.CTkButton(frameBut, text="Ripristina tutto",
+                      command=clear_all, fg_color="#df2c14", hover_color="#c61a09")
+btnCl.pack(side="left", pady=3, padx=20)
+# Version button
+btnF = ctk.CTkButton(frameBut, text="Cambia Versione",
+                     command=change_version, fg_color="#24a0ed", hover_color="#1183ca")
+btnF.pack(side="right", pady=3, padx=20)
 
 # Result paragraph
 lbR = ctk.CTkLabel(master=frame, text="")

@@ -3,7 +3,7 @@ import cv2
 from DCT import custom_dct2, custom_idct2
 
 
-def process_image(image_path, F, d):
+def process_image(image_path, F, d, fast=True):
     # suddividere l’immagine in blocchi quadrati f di pixel di dimensioni F×F partendo in alto a sinistra, scartando gli avanzi;
     image = cv2.imread(image_path, 0)
     height, width = image.shape
@@ -21,15 +21,19 @@ def process_image(image_path, F, d):
             block = blocks[i, j]
 
             # Applica la DCT2
-            # c = custom_dct2(np.float32(block))
-            c = cv2.dct(np.float32(block))
+            if fast:
+                c = cv2.dct(np.float32(block))
+            else:
+                c = custom_dct2(np.float32(block))
 
             # Taglia le frequenze
             c = threshold_cutoff(c, d)
 
             # Applica l'inversa della DCT2
-            # ff = custom_idct2(c)
-            ff = cv2.idct(c)
+            if fast:
+                ff = cv2.idct(c)
+            else:
+                ff = custom_idct2(c)
 
             # Arrotonda e normalizza i valori
             ff = np.round(ff)
@@ -51,6 +55,6 @@ def threshold_cutoff(coefficients, threshold):
     size = coefficients.shape[0]
     for i in range(size):
         for j in range(size):
-            if i + j >= threshold:
+            if i + j > threshold:
                 coefficients[i, j] = 0
     return coefficients
