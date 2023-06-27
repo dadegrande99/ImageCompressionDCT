@@ -30,31 +30,36 @@ def custom_dct2(matrix):
     return dct_full
 
 
-def custom_idct2(dct_image):
-   # Ottieni le dimensioni del blocco
-    M, N = dct_image.shape
+def custom_idct(vector):
+    # Calcola l'IDCT-II per un vettore unidimensionale
 
-    # Inizializza l'array per il blocco di output
-    f = np.zeros((M, N), dtype=np.float64)
+    N = len(vector)
+    idct_vector = np.zeros(N)
 
-    # Calcola la DCT2 inversa per ogni punto del blocco
-    for i in range(M):
-        for j in range(N):
-            # Calcola il valore del punto (i, j) del blocco di output
-            value = 0.0
-            for x in range(M):
-                for y in range(N):
-                    # Calcola il coefficiente di coseno
-                    coef = np.cos((np.pi / M) * (i + 0.5) * x) * \
-                        np.cos((np.pi / N) * (j + 0.5) * y)
+    for n in range(N):
+        sum_val = 0.0
+        for k in range(N):
+            if k == 0:
+                sum_val += (1 / np.sqrt(2)) * \
+                    vector[k] * np.cos((np.pi / N) * (n + 0.5) * k)
+            else:
+                sum_val += vector[k] * np.cos((np.pi / N) * (n + 0.5) * k)
+        idct_vector[n] = sum_val * np.sqrt(2 / N)
 
-                    # Aggiungi il termine alla somma
-                    value += coef * dct_image[x, y]
+    return idct_vector
 
-            # Moltiplica il valore per il fattore di normalizzazione
-            value *= (2 / M) * (2 / N)
 
-            # Assegna il valore al punto (i, j) del blocco di output
-            f[i, j] = value
+def custom_idct2(matrix):
+    # Calcola l'IDCT-II per una matrice bidimensionale
 
-    return f
+    # Applica l'IDCT-II alle colonne
+    idct_cols = np.zeros_like(matrix, dtype=float)
+    for i in range(matrix.shape[1]):
+        idct_cols[:, i] = custom_idct(matrix[:, i])
+
+    # Applica l'IDCT-II alle righe
+    idct_full = np.zeros_like(matrix, dtype=float)
+    for i in range(matrix.shape[0]):
+        idct_full[i, :] = custom_idct(idct_cols[i, :])
+
+    return idct_full
