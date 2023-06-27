@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pylab as plt
 import utils as u
 from datetime import datetime
-from scipy.fftpack import dct
 import cv2
 from DCT import custom_dct2
 
@@ -12,55 +11,56 @@ plt.rcParams['figure.figsize'] = [9, 6]
 plt.rcParams['figure.dpi'] = 100
 
 
-dimensions = [20, 40, 80, 160]
+maxExp = 9
+minExp = 5
+dimensions = []
+for e in range(minExp, maxExp+1):
+    dimensions.append(10*2**(e))
 
 timing = {
     "HomeMade": [],  # timing with our method
-    "FFT-c": [],  # timing with cv2 method
-    "FFT-s": []  # timing with scipy method
-}
-timing2 = {
-    "HomeMade": [],  # timing with our method
-    "FFT-c": [],  # timing with cv2 method
-    "FFT-s": []  # timing with scipy method
+    "FFT": []  # timing with cv2 method (FFT)
 }
 results = {
     "HomeMade": [],  # results with our method
-    "FFT-c": [],  # results with cv2 method
-    "FFT-s": []  # results with scipy method
+    "FFT": []  # results with cv2 method
 }
 
 for n in dimensions:
+    print(n)
     matrix = np.random.randint(0, 256, size=(n, n))
     t0 = datetime.now()
-    results["FFT-s"].append(dct(matrix, type=2))
+    results["FFT"].append(cv2.dct(np.float32(matrix)))
     t1 = datetime.now()
-    results["FFT-c"].append(cv2.dct(np.float32(matrix)))
+    results["HomeMade"].append(custom_dct2(np.float32(matrix)))
     t2 = datetime.now()
-    results["HomeMade"].append(custom_dct2(matrix))
-    t3 = datetime.now()
 
-    timing2["HomeMade"].append(t3 - t2)
-    timing2["FFT-c"].append(t2 - t1)
-    timing2["FFT-s"].append(t1 - t0)
+    timing["HomeMade"].append(t2 - t1)
+    timing["FFT"].append(t1 - t0)
 
-for i in range(len(dimensions)):
-    timing["HomeMade"].append(
-        int(timing2["HomeMade"][i].total_seconds() * 1e6))
-    timing["FFT-c"].append(int(timing2["FFT-c"][i].total_seconds() * 1e6))
-    timing["FFT-s"].append(int(timing2["FFT-s"][i].total_seconds() * 1e6))
+for i in range(len(timing["HomeMade"])):
+    timing["HomeMade"][i] = int(timing["HomeMade"][i].total_seconds() * 1e6)
+    timing["FFT"][i] = int(timing["FFT"][i].total_seconds() * 1e6)
 
+# DCT plot
 for type in timing:
-    if type == "FFT-s":
+    if type == "FFT":
         col = "green"
-    elif type == "FFT-c":
-        col = "yellow"
     elif type == "HomeMade":
         col = "blue"
-    plt.semilogy(timing[type], dimensions, color=col, label=type)
+    plt.semilogy(dimensions, timing[type], color=col, label=type)
 
-plt.xlabel('Times')
-plt.ylabel('Dimensions')
+# Theorical plot
+n = np.arange(min(dimensions), max(dimensions))
+y3 = n**3
+plt.semilogy(n, y3, color='red', label='O(N^3)')
+y2l = (n**2)*np.log(n)
+plt.semilogy(n, y2l, color='brown', label='O(N^2 Log(N))')
+
+# plot styles
+plt.xlabel('Dimensions')
+plt.ylabel('Times')
 plt.title('Comparing different DCT')
 plt.legend()
+plt.grid(False)
 plt.show()
