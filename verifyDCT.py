@@ -58,7 +58,7 @@ itestMtx = custom_idct2(testMtx)
 # DCT
 print("------------ Correttezza DCT ------------")
 print("\n Vettore input")
-print(verArr2)
+print(verArr1)
 print("\n Vettore atteso")
 print(verArr2)
 print("\n Vettore calcolato")
