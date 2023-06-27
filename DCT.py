@@ -37,13 +37,9 @@ def custom_idct(vector):
     idct_vector = np.zeros(N)
 
     for n in range(N):
-        sum_val = 0.0
-        for k in range(N):
-            if k == 0:
-                sum_val += (1 / np.sqrt(2)) * \
-                    vector[k] * np.cos((np.pi / N) * (n + 0.5) * k)
-            else:
-                sum_val += vector[k] * np.cos((np.pi / N) * (n + 0.5) * k)
+        sum_val = (1 / np.sqrt(2)) * vector[0]
+        for k in range(1, N):
+            sum_val += vector[k] * np.cos((np.pi / N) * (n + 0.5) * k)
         idct_vector[n] = sum_val * np.sqrt(2 / N)
 
     return idct_vector
