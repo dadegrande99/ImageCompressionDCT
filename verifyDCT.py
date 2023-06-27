@@ -1,6 +1,6 @@
 import numpy as np
 import utils as u
-from DCT import custom_dct, custom_dct2
+from DCT import custom_dct, custom_dct2, custom_idct, custom_idct2
 
 
 # Dati per DCT
@@ -49,6 +49,10 @@ verMtx2 = np.array([
 testArr = custom_dct(verArr1)
 # DCT2 ~ Matrice calcolata
 testMtx = custom_dct2(verMtx1)
+# IDCT ~ Vettore inverso (originale)
+itestArr = custom_idct(testArr)
+# IDCT2 ~ Matrice inverso (originale)
+itestMtx = custom_idct2(testMtx)
 
 # Stampe
 # DCT
@@ -59,14 +63,15 @@ print("\n Vettore atteso")
 print(verArr2)
 print("\n Vettore calcolato")
 print(testArr)
-'''
-testArr = u.reFormat(testArr, 3)
-print(testArr)
-if u.MtxArrCompare(testArr, verArr2):
-    print("La verifica sulla DCT per Arr è andata a buon fine")
+print("\n Vettore inverso")
+print(itestArr)
+
+print()
+if u.MtxArrCompare(np.float32(itestArr), verArr1):
+    print("La verifica sulla DCT e IDCT per Array è andata a buon fine")
 else:
-    print("La verifica sulla DCT per Arr non è andata a buon fine")
-'''
+    print("La verifica sulla DCT e IDCT per Array non è andata a buon fine")
+
 
 print("\n\n\n")
 
@@ -78,11 +83,11 @@ print("\n Matrice attesa")
 print(verMtx2)
 print("\n Matrice calcolata")
 print(testMtx)
-'''
-testMtx = u.reFormat(testMtx, 3)
-print(testMtx)
-if u.MtxArrCompare(testMtx, verMtx2):
-    print("La verifica sulla DCT per Mtx è andata a buon fine")
+print("\n Matrice inversa")
+print(itestMtx)
+
+print()
+if u.MtxArrCompare(np.float32(itestMtx), verMtx1):
+    print("La verifica sulla DCT2 e IDCT2 per Matrici è andata a buon fine")
 else:
-    print("La verifica sulla DCT per Mtx non è andata a buon fine")
-'''
+    print("La verifica sulla DCT2 e IDCT2 per Matrici non è andata a buon fine")
