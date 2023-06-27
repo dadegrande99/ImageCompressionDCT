@@ -55,6 +55,6 @@ def threshold_cutoff(coefficients, threshold):
     size = coefficients.shape[0]
     for i in range(size):
         for j in range(size):
-            if i + j > threshold:
+            if i + j >= threshold:
                 coefficients[i, j] = 0
     return coefficients
