@@ -7,30 +7,28 @@ def custom_dct(image):
     dct_image = np.zeros(dim)
 
     for k in range(dim):
-        dct_image[k] = np.sqrt(2/dim) * np.sum(image * np.cos((np.pi/dim) * k * (np.arange(dim) + 0.5)))
+        dct_image[k] = np.sqrt(2/dim) * np.sum(image *
+                                               np.cos((np.pi/dim) * k * (np.arange(dim) + 0.5)))
 
-        if k == 0:
-            dct_image[k] *= 1/np.sqrt(2)
+    dct_image[0] *= 1/np.sqrt(2)
     return dct_image
 
-def custom_dct2(matrix):
-    #avremo in input un'immagine che dovremo convertire in un numpy array
-    rows, cols = matrix.shape
-    dct_matrix = np.zeros_like(matrix, dtype=float)
 
-    for i in range(rows):
-        for j in range(cols):
-            sum = 0.0
-            coeff_u = 1 if i == 0 else np.sqrt(2)
-            coeff_v = 1 if j == 0 else np.sqrt(2)
-            for u in range(rows):
-                for v in range(cols):
-                    pixel_value = matrix[u, v]
-                    cosine_u = np.cos((2 * u + 1) * i * np.pi / (2*rows))
-                    cosine_v = np.cos((2 * v + 1) * j * np.pi / (2*cols))
-                    sum += pixel_value * cosine_u * cosine_v
-            dct_matrix[i, j] = sum * coeff_u * coeff_v / np.sqrt(rows*cols)
-    return dct_matrix
+def custom_dct2(matrix):
+    # Avremo in input un'immagine che dovremo convertire in un numpy array
+
+    # Applica la DCT alle colonne
+    dct_cols = np.zeros_like(matrix, dtype=float)
+    for i in range(matrix.shape[1]):
+        dct_cols[:, i] = custom_dct(matrix[:, i])
+
+    # Applica la DCT alle righe così da ottenere il risultato completo
+    dct_full = np.zeros_like(matrix, dtype=float)
+    for i in range(matrix.shape[0]):
+        dct_full[i, :] = custom_dct(dct_cols[i, :])
+
+    return dct_full
+
 
 def custom_idct2(dct_image):
    # Ottieni le dimensioni del blocco
@@ -47,7 +45,8 @@ def custom_idct2(dct_image):
             for x in range(M):
                 for y in range(N):
                     # Calcola il coefficiente di coseno
-                    coef = np.cos((np.pi / M) * (i + 0.5) * x) * np.cos((np.pi / N) * (j + 0.5) * y)
+                    coef = np.cos((np.pi / M) * (i + 0.5) * x) * \
+                        np.cos((np.pi / N) * (j + 0.5) * y)
 
                     # Aggiungi il termine alla somma
                     value += coef * dct_image[x, y]
