@@ -3,10 +3,10 @@ import numpy as np
 
 def find_alpha(window: tuple, image: tuple):
     # Calculation of the alpha coefficient for resizing the window in which the image is displayed
-    if image[0] >= image[1]:  # Resize by height
-        return (window[0]/4)/image[0]
-    else:  # Resize by width
-        return (window[1]/3)/image[1]
+    if image[0] >= image[1]:  # Resize by width
+        return (window[0]/3)/image[0]
+    else:  # Resize by height
+        return (window[1]/4)/image[1]
 
 
 def is_pos_int(str: str):
