@@ -1,17 +1,38 @@
-# Progetto Metodi del Calcolo Scientifico ~ Compressione di immagini
+# Image comression with DTC
 
-## Descrizione rapida dei file
+Undergraduate project of the course Methods of Scientific Computation.
+
+The purpose of this project is to implement and use DCT2 in an open source environment on gray tone images, tests are then made to verify the correctness of the implementation, and a graphical interface is made to easily test the effects of DCT2 on images
+
+## Table of contents
+
+- [Image comression with DTC](#image-comression-with-dtc)
+  - [Table of contents](#table-of-contents)
+  - [File description](#file-description)
+  - [Contributors](#contributors)
+  - [License](#license)
+
+## File description
 
 - `README.md`
-  - Descrizione tecnica del progetto
+  - Technical description of the project
 - `utils.py`
-  - Definizione di funzioni utili all'aplicazione
+  - Definition of functions useful for apllication
 - `interface.py`
-  - File eseguibile dove viene costriutata l'interfaccia dell'applicazione che richiama i dovuti metodi per la compressione delle immagini
+  - Executable file where the application interface is constriuted that calls the due methods for image compression
 - `DCT.py`
-  - File di implentazione della libreria custom sulla DCT
+  - Implication file of the custom library on the DCT
 - `testTimeDCT.py`
-  - Verifica che i tempi dovrebbero essere proporzionali a $O(N^3)$ per la DCT2 fatta in casa e a $O(N^2\log (N))$ per la versione fast ottenuta realizzata da una libreria già fatta(`cv2`)
-  - I test sono stati fatti su matrici contenti numeri casuali da 0 a 255 delle seguente dimensioni  $\left[\begin{matrix}320\times320&640\times640&1280\times1280&2560\times2560&5120\times5120\\\end{matrix}\right]$
+  - Check that the times should be proportional to $O(N^3)$ for the homemade DCT2 and to $O(N^2\log (N))$ for the obtained fast version made from an already made library(`cv2`)
+  - The tests were done on matrices containing random numbers from 0 to 255 of the following size $\left[\begin{matrix}320\times320&640\times640&1280\times1280&2560\times2560&5120\times5120\end{matrix}\right]$
 - `verifyDCT.py`
-  - Test fittizi per verificare la correttezza sia per la DCT monodimensionale, sia per quella bidimensionale, effettuati controlli anche su quella inversa
+  - Dummy tests to verify correctness for both one-dimensional and two-dimensional DCT, performed checks on inverse DCT as well
+
+## Contributors
+
+- [Davide Grandesso](mailto:d.grandesso@campus.unimib.it)
+- [Fabio Marini](mailto:f.marini14@campus.unimib.it)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
