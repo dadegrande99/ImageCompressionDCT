@@ -1,8 +1,10 @@
 # Image comression with DTC
 
-Undergraduate project of the course Methods of Scientific Computation.
+Undergraduate project of the course [Methods of Scientific Computation](https://elearning.unimib.it/course/info.php?id=44604#en) (MSc in Computer Science at [University of Study in Milan-Bicocca](https://en.unimib.it/)).
 
-The purpose of this project is to implement and use DCT2 in an open source environment on gray tone images, tests are then made to verify the correctness of the implementation, and a graphical interface is made to easily test the effects of DCT2 on images
+The purpose of this project is to implement and use DCT2 in an open source environment on gray tone images, tests are then made to verify the correctness of the implementation, and a graphical interface is made to easily test the effects of DCT2 on images.
+
+Is possible to read more details about the results obtained in the [Report(IT version)](Report%20-%20IT.pdf).
 
 ## Table of contents
 
