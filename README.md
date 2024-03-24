@@ -32,9 +32,9 @@ Is possible to read more details about the results obtained in the [Report(IT ve
 
 ## Contributors
 
-- [Davide Grandesso](mailto:d.grandesso@campus.unimib.it)
-- [Fabio Marini](mailto:f.marini14@campus.unimib.it)
+- [Davide Grandesso](https://github.com/dadegrande99/)
+- [Fabio Marini](https://github.com/fabbio00/)
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/) - see the [LICENSE](LICENSE) file for details.
